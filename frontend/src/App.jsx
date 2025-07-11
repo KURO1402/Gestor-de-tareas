@@ -4,7 +4,7 @@ import NavBar from "./components/NavBar";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Register from "./pages/auth/registro";
-import Login from "./pages/auth/login";
+import Login from "./pages/auth/Login";
 
 const AppRoutes = () => {
   const routers = useRoutes([

@@ -1,6 +1,20 @@
 import AuthForm from "../../components/AuthForm";
+import { useForm } from "react-hook-form";
+import ErrorMessage from "../../components/form/ErrorMessage";
 
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+    reset();
+  });
   return (
     <AuthForm
       title={"Crea tu cuenta"}
@@ -8,22 +22,38 @@ const Register = () => {
       pregunta={"¿Ya tienes una cuenta?"}
       linkName={"Inicia Sesión"}
     >
-      <form className="space-y-5">
+      <form onSubmit={onSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
-              htmlFor="firstName"
+              htmlFor="name"
               className="block text-sm font-medium text-cyan-100 mb-2"
             >
               Nombre
             </label>
             <input
               type="text"
-              id="firstName"
+              id="name"
               className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
               placeholder="Ej: Juan"
+              {...register("name", {
+                required: {
+                  value: true,
+                  message: "Nombre es requerido",
+                },
+                minLength: {
+                  value: 2,
+                  message: "Nombre debe tener más de 2 caracteres",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Nombre debe tener menos de 20 caracteres",
+                },
+              })}
             />
+          <ErrorMessage error={errors.name} />
           </div>
+
           <div>
             <label
               htmlFor="lastName"
@@ -36,7 +66,22 @@ const Register = () => {
               id="lastName"
               className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
               placeholder="Ej: Pérez"
+              {...register("lastName", {
+                required: {
+                  value: true,
+                  message: "Apellido es requerido",
+                },
+                minLength: {
+                  value: 2,
+                  message: "Apellido debe tener más de 2 caracteres",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Apellido debe tener menos de 20 caracteres",
+                },
+              })}
             />
+            <ErrorMessage error={errors.lastName} />
           </div>
         </div>
 
@@ -52,7 +97,18 @@ const Register = () => {
             id="email"
             className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
             placeholder="tu@email.com"
+            {...register("email", {
+              required: {
+                value: true,
+                message: "El correo es requerido",
+              },
+              pattern: {
+                value: /^[a-z0-9._%+-]+@[a-z0-9-]+\.[a-z]{2,4}$/,
+                message: "Correo no válido",
+              },
+            })}
           />
+        <ErrorMessage error={errors.email} />
         </div>
 
         <div>
@@ -66,11 +122,18 @@ const Register = () => {
             type="password"
             id="password"
             className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
-            placeholder="••••••••"
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Password es requerido",
+              },
+              minLength: {
+                  value: 8,
+                  message: "La contraseña debe tener al menos 8 caracteres",
+                },
+            })}
           />
-          <p className="mt-1 text-xs text-indigo-400/60">
-            Mínimo 8 caracteres, incluye números y símbolos
-          </p>
+        <ErrorMessage error={errors.password} />
         </div>
 
         <div>
@@ -84,8 +147,16 @@ const Register = () => {
             type="password"
             id="confirmPassword"
             className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
-            placeholder="••••••••"
+            {...register("confirmarPassword", {
+              required: {
+                value: true,
+                message: "Confirmar contraseña es requerido",
+              },
+              validate: (value) =>
+                value === watch("password") || "Los password no coinciden",
+            })}
           />
+        <ErrorMessage error={errors.confirmarPassword} />
         </div>
 
         <div className="flex items-start">
@@ -93,6 +164,12 @@ const Register = () => {
             id="terms"
             type="checkbox"
             className="h-4 w-4 mt-1 rounded border-indigo-300 text-cyan-500 focus:ring-cyan-500/50"
+            {...register("terms", {
+              required: {
+                value: true,
+                message: "Debes aceptar los términos y condiciones",
+              },
+            })}
           />
           <label htmlFor="terms" className="ml-2 block text-sm text-indigo-200">
             Acepto los{" "}
@@ -105,6 +182,7 @@ const Register = () => {
             </a>
           </label>
         </div>
+        <ErrorMessage error={errors.terms} />
 
         <button
           type="submit"

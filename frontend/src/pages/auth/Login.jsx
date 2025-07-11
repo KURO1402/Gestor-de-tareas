@@ -1,9 +1,21 @@
-import { Link } from "react-router-dom";
-import ParticlesEffect from "../../components/ParticlesEffect";
-import Logo from "../../components/Logo";
 import AuthForm from "../../components/AuthForm";
+import { useForm } from "react-hook-form";
+import ErrorMessage from "../../components/form/ErrorMessage";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+    reset();
+  });
+
   return (
     <AuthForm
       title={"Iniciar Sesión"}
@@ -11,7 +23,7 @@ const Login = () => {
       pregunta={"¿No tienes una cuenta?"}
       linkName={"Regístrate"}
     >
-      <form className="space-y-6">
+      <form onSubmit={onSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="email"
@@ -24,7 +36,14 @@ const Login = () => {
             id="email"
             className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
             placeholder="tu@email.com"
+            {...register("email", {
+              required: {
+                value: true,
+                message: "El correo es requerido",
+              }
+            })}
           />
+          <ErrorMessage error={errors.email} /> 
         </div>
 
         <div>
@@ -35,19 +54,25 @@ const Login = () => {
             >
               Contraseña
             </label>
-            <Link
+            {/* <Link
               to="/forgot-password"
               className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
             >
               ¿Olvidaste tu contraseña?
-            </Link>
+            </Link> */}
           </div>
           <input
             type="password"
             id="password"
             className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
-            placeholder="••••••••"
+            {...register("password", {
+              required: {
+                value: true,
+                message: "La contraseña es requerida",
+              }
+            })}
           />
+          <ErrorMessage error={errors.password} />
         </div>
 
         <button

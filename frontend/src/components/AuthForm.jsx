@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import ParticlesEffect from "./ParticlesEffect";
+import SimpleButton from "./SimpleButton";
 
 const AuthForm = ({ title, description, pregunta, linkName, children }) => {
   return (
@@ -18,36 +19,29 @@ const AuthForm = ({ title, description, pregunta, linkName, children }) => {
         <h2 className="text-3xl font-bold text-white text-center mb-2">
           {title}
         </h2>
-        <p className="text-center text-indigo-200/80 mb-8">
-          {description}
-        </p>
+        <p className="text-center text-indigo-200/80 mb-8">{description}</p>
 
         {/* Formulario */}
-        <div>
-            <form className="space-y-6">
-                {children}
-            </form>
-        </div>
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-indigo-500/30"></div>
-          <span className="mx-4 text-sm text-indigo-300/60">o</span>
-          <div className="flex-grow border-t border-indigo-500/30"></div>
+        <div className="space-y-6">
+          {children}
         </div>
 
         {/* Enlace a Registro */}
-        <div className="mt-6 text-center text-sm text-indigo-300/80">
-          {pregunta}{" "}
+        <div className="mt-6 grid grid-cols-4 items-center gap-2 text-sm text-indigo-300/80">
+          <span className="col-span-1">{pregunta}</span>
           <Link
-            {... linkName === "Regístrate" ? {to: "/register"} : {to: "/login"}}
-            className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+            className="text-cyan-400 col-span-2 ml-2 hover:text-cyan-300 font-medium transition-colors"
+            {...(linkName === "Regístrate"
+              ? { to: "/register" }
+              : { to: "/login" })}
           >
             {linkName}
           </Link>
+          <Link to="/" className="col-span-1 flex justify-end">
+            <SimpleButton value={"Volver"} />
+          </Link>
         </div>
       </div>
-
-      {/* Estilos para animaciones (agregar en tu CSS global) */}
     </div>
   );
 };
