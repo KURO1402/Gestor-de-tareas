@@ -1,0 +1,158 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 12-07-2025 a las 00:44:03
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.1.25
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `tareasdb`
+--
+CREATE DATABASE IF NOT EXISTS `tareasdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `tareasdb`;
+
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarUsuario` (IN `p_nombres` VARCHAR(30), IN `p_apellidos` VARCHAR(50), IN `p_correo` VARCHAR(30), IN `p_contraseña` VARCHAR(30), IN `p_idTipoUs` INT)   BEGIN
+    INSERT INTO usuario (nombres, apellidos, correo, contraseña, idTipoUs)
+    VALUES (p_nombres, p_apellidos, p_correo, p_contraseña, p_idTipoUs);
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tarea`
+--
+
+CREATE TABLE `tarea` (
+  `idTarea` int(11) NOT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `estado` enum('finalizado','en proceso') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipousuario`
+--
+
+CREATE TABLE `tipousuario` (
+  `idTipoUs` int(11) NOT NULL,
+  `tipoUsuario` enum('administrador','usuario') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipousuario`
+--
+
+INSERT INTO `tipousuario` (`idTipoUs`, `tipoUsuario`) VALUES
+(1, 'administrador'),
+(2, 'usuario');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `idUsuario` int(11) NOT NULL,
+  `idTipoUs` int(11) DEFAULT NULL,
+  `nombres` varchar(30) NOT NULL,
+  `apellidos` varchar(50) NOT NULL,
+  `correo` varchar(30) NOT NULL,
+  `contraseña` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`, `contraseña`) VALUES
+(1, 1, 'Juan', 'Perez', 'jperez@gmail.com', '123'),
+(2, 2, 'Pedro', 'Suarez', 'psuarez@gmail.com', '123'),
+(3, 2, 'Abel', 'Ramirez', 'aramirez@gmail.com', '123');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `tarea`
+--
+ALTER TABLE `tarea`
+  ADD PRIMARY KEY (`idTarea`),
+  ADD KEY `idUsuario` (`idUsuario`);
+
+--
+-- Indices de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  ADD PRIMARY KEY (`idTipoUs`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`idUsuario`),
+  ADD KEY `idTipoUs` (`idTipoUs`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `tarea`
+--
+ALTER TABLE `tarea`
+  MODIFY `idTarea` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tipousuario`
+--
+ALTER TABLE `tipousuario`
+  MODIFY `idTipoUs` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `tarea`
+--
+ALTER TABLE `tarea`
+  ADD CONSTRAINT `tarea_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
+
+--
+-- Filtros para la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`idTipoUs`) REFERENCES `tipousuario` (`idTipoUs`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
