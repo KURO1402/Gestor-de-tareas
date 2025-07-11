@@ -8,4 +8,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME,
 });
 
+pool.on('error', (err) => {
+  console.error('Error inesperado en el pool de MySQL:', err);
+});
+
 module.exports=pool;
