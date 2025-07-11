@@ -1,0 +1,42 @@
+CREATE DATABASE IF NOT EXISTS tareasdb;
+USE tareasdb;
+
+CREATE TABLE tipoUsuario (
+    idTipoUs INT AUTO_INCREMENT PRIMARY KEY,
+    tipoUsuario ENUM('administrador', 'usuario') NOT NULL
+);
+
+CREATE TABLE usuario (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    idTipoUs INT,
+    nombres VARCHAR(30) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL,
+    correo VARCHAR(30) NOT NULL,
+    contraseña VARCHAR(30) NOT NULL,
+    FOREIGN KEY (idTipoUs) REFERENCES tipoUsuario(idTipoUs)
+);
+
+CREATE TABLE tarea (
+    idTarea INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    descripcion TEXT,
+    estado ENUM('finalizado', 'en proceso') NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario)
+);
+
+-- Procedimiento almacenado: registrar un usuario
+DELIMITER //
+
+CREATE PROCEDURE registrarUsuario (
+    IN p_nombres VARCHAR(30),
+    IN p_apellidos VARCHAR(50),
+    IN p_correo VARCHAR(30),
+    IN p_contraseña VARCHAR(30),
+    IN p_idTipoUs INT
+)
+BEGIN
+    INSERT INTO usuario (nombres, apellidos, correo, contraseña, idTipoUs)
+    VALUES (p_nombres, p_apellidos, p_correo, p_contraseña, p_idTipoUs);
+END //
+
+DELIMITER ;
