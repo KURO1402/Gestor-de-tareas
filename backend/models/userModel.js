@@ -9,7 +9,6 @@ const getUsersDB = async (page = 1, limit = 20) => {
       "SELECT u.idUsuario, u.nombres, u.apellidos, t.tipoUsuario, u.correo FROM usuarios u INNER JOIN tipousuario t ON u.idTipoUs = t.idTipoUs LIMIT ? OFFSET ?",
       [limit, offset]
     );
-    console.log(rows)
     return rows;
   } catch (error) {
     console.error("Error en getUsersDB:", error.message);
