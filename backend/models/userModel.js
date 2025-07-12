@@ -8,7 +8,7 @@ const getUsersDB = async (page = 1, limit = 20) => {
     const [rows] = await pool.query(
       "SELECT u.idUsuario, u.nombres, u.apellidos, t.tipoUsuario, u.correo FROM usuarios u INNER JOIN tipousuario t ON u.idTipoUs = t.idTipoUs LIMIT ? OFFSET ?",
       [limit, offset]
-    );
+    );  
     return rows;
   } catch (error) {
     console.error("Error en getUsersDB:", error.message);
@@ -16,7 +16,7 @@ const getUsersDB = async (page = 1, limit = 20) => {
   }
 };
 
-getUsersDB();
+
 // Crear usuario con contraseña hasheada
 const createUserDB = async (userData) => {
   const { nombres, apellidos, correo, password } = userData;
