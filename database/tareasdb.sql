@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2025 a las 00:44:03
+-- Tiempo de generación: 12-07-2025 a las 02:49:33
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.1.25
 
@@ -27,9 +27,9 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarUsuario` (IN `p_nombres` VARCHAR(30), IN `p_apellidos` VARCHAR(50), IN `p_correo` VARCHAR(30), IN `p_contraseña` VARCHAR(30), IN `p_idTipoUs` INT)   BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo, contraseña, idTipoUs)
-    VALUES (p_nombres, p_apellidos, p_correo, p_contraseña, p_idTipoUs);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarUsuario` (IN `p_nombres` VARCHAR(30), IN `p_apellidos` VARCHAR(50), IN `p_correo` VARCHAR(30), IN `p_clave` VARCHAR(30), IN `p_idTipoUs` INT)   BEGIN
+    INSERT INTO usuario (nombres, apellidos, correo, clave, idTipoUs)
+    VALUES (p_nombres, p_apellidos, p_correo, p_clave, p_idTipoUs);
 END$$
 
 DELIMITER ;
@@ -78,17 +78,18 @@ CREATE TABLE `usuario` (
   `nombres` varchar(30) NOT NULL,
   `apellidos` varchar(50) NOT NULL,
   `correo` varchar(30) NOT NULL,
-  `contraseña` varchar(30) NOT NULL
+  `clave` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`, `contraseña`) VALUES
+INSERT INTO `usuario` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`, `clave`) VALUES
 (1, 1, 'Juan', 'Perez', 'jperez@gmail.com', '123'),
 (2, 2, 'Pedro', 'Suarez', 'psuarez@gmail.com', '123'),
-(3, 2, 'Abel', 'Ramirez', 'aramirez@gmail.com', '123');
+(3, 2, 'Abel', 'Ramirez', 'aramirez@gmail.com', '123'),
+(4, 2, 'Alberto', 'Gomez', 'agomez@gmail.com', '123');
 
 --
 -- Índices para tablas volcadas
@@ -134,7 +135,7 @@ ALTER TABLE `tipousuario`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas

@@ -12,7 +12,7 @@ CREATE TABLE usuario (
     nombres VARCHAR(30) NOT NULL,
     apellidos VARCHAR(50) NOT NULL,
     correo VARCHAR(30) NOT NULL,
-    contraseña VARCHAR(30) NOT NULL,
+    clave VARCHAR(30) NOT NULL,
     FOREIGN KEY (idTipoUs) REFERENCES tipoUsuario(idTipoUs)
 );
 
@@ -31,12 +31,12 @@ CREATE PROCEDURE registrarUsuario (
     IN p_nombres VARCHAR(30),
     IN p_apellidos VARCHAR(50),
     IN p_correo VARCHAR(30),
-    IN p_contraseña VARCHAR(30),
+    IN p_clave VARCHAR(30),
     IN p_idTipoUs INT
 )
 BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo, contraseña, idTipoUs)
-    VALUES (p_nombres, p_apellidos, p_correo, p_contraseña, p_idTipoUs);
+    INSERT INTO usuario (nombres, apellidos, correo, clave, idTipoUs)
+    VALUES (p_nombres, p_apellidos, p_correo, p_clave, p_idTipoUs);
 END //
 
 DELIMITER ;
