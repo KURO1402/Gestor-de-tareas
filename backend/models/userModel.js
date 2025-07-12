@@ -16,7 +16,10 @@ const getUsersDB = async (page = 1, limit = 20) => {
   }
 };
 
+<<<<<<< Updated upstream
 getUsersDB();
+=======
+>>>>>>> Stashed changes
 // Crear usuario con contraseña hasheada
 const createUserDB = async (userData) => {
   const { nombres, apellidos, correo, password } = userData;
