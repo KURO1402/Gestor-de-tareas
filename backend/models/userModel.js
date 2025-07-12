@@ -15,8 +15,6 @@ const getUsersDB = async (page = 1, limit = 20) => {
     throw new Error("Error al obtener usuarios");
   }
 };
-
-getUsersDB();
 // Crear usuario con contraseña hasheada
 const createUserDB = async (userData) => {
   const { nombres, apellidos, correo, password } = userData;
