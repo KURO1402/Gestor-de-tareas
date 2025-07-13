@@ -3,12 +3,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const tasksRoutes = require('./routes/tasksRouter');
 
 //middlewares esenciales
 app.use(express.json());
 app.use(cors());
 
 app.use('/api',userRoutes);
+app.use('/api',tasksRoutes);
 
 //Manejar errores generales del servidor
 app.use((err, req, res, next) => {
