@@ -1,29 +1,45 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoutes from "./components/PrivateRoutes";
+
+import Home from "./pages/Home";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
+import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
 
 import NavBar from "./components/NavBar";
-import NotFound from "./pages/NotFound";
-import Home from "./pages/Home";
-import Register from "./pages/auth/registro";
-import Login from "./pages/auth/Login";
 
 const AppRoutes = () => {
   const routers = useRoutes([
+    /* Rutas publicas */
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/*", element: <NotFound /> },
+    /* Rutas privadas */
+    {
+      path: "/dashboard",
+      element: (
+        <PrivateRoutes>
+          <Dashboard />
+        </PrivateRoutes>
+      ),
+    },
   ]);
   return routers;
 };
 
 const App = () => {
   return (
-    <BrowserRouter>
-    <AppRoutes >
-      <AppRoutes />
-      <NavBar />
-    </AppRoutes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes>
+          <AppRoutes />
+          <NavBar />
+        </AppRoutes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 export default App;

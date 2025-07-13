@@ -1,19 +1,30 @@
-import AuthForm from "../../components/AuthForm";
 import { useForm } from "react-hook-form";
-import ErrorMessage from "../../components/form/ErrorMessage";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+import AuthForm from "../../components/AuthForm";
+import FormField from "../../components/form/FormField.jsx";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    reset();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const onSubmit = handleSubmit( async (data) => {
+    try {
+      await login({
+        correo: data.email,
+        password: data.password,
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      alert("Error al iniciar sesión. Por favor, verifica tus credenciales.");
+    }
   });
 
   return (
@@ -25,54 +36,34 @@ const Login = () => {
     >
       <form onSubmit={onSubmit} className="space-y-6">
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-cyan-100 mb-2"
-          >
-            Correo Electrónico
-          </label>
-          <input
-            type="email"
+          <FormField
+            label="Correo Electrónico"
             id="email"
-            className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
+            type="email"
             placeholder="tu@email.com"
-            {...register("email", {
-              required: {
-                value: true,
-                message: "El correo es requerido",
-              }
-            })}
+            register={register}
+            validation={{
+              required: "Correo es requerido",
+              pattern: {
+                value: /^[a-z0-9._%+-]+@[a-z0-9-]+\.[a-z]{2,4}$/,
+                message: "Correo no válido",
+              },
+            }}
+            error={errors.email}
           />
-          <ErrorMessage error={errors.email} /> 
         </div>
 
         <div>
-          <div className="flex justify-between items-center mb-2">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-cyan-100"
-            >
-              Contraseña
-            </label>
-            {/* <Link
-              to="/forgot-password"
-              className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link> */}
-          </div>
-          <input
-            type="password"
+          <FormField
+            label="Contraseña"
             id="password"
-            className="w-full px-4 py-3 bg-indigo-900/40 border border-indigo-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 text-white placeholder-indigo-400/70 transition-all duration-200"
-            {...register("password", {
-              required: {
-                value: true,
-                message: "La contraseña es requerida",
-              }
-            })}
+            type="password"
+            register={register}
+            validation={{
+              required: "Contraseña es requerida",
+            }}
+            error={errors.password}
           />
-          <ErrorMessage error={errors.password} />
         </div>
 
         <button
