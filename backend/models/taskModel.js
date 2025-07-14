@@ -11,6 +11,26 @@ const getTasksDB = async(idUser) => {
     }
 }
 
+//Crear una nueva tarea
+const createTaskDB = async(taskData) => {
+    const {usuario, descripcion} = taskData;
+    const estado = "pendiente";
+    try {
+        const [result] = await pool.query("INSERT INTO tareas(idUsuario, descripcion, estado) VALUES (?, ?, ?)",[usuario, descripcion, estado]);
+        
+        return {
+            id: result.insertId,
+            descripcion,
+            estado
+        };
+
+    } catch (error) {
+        console.error("Error al registrar la tarea:", error.message);
+        throw new Error("Error al insertar la tarea");
+    }
+}
+
 module.exports = { 
-    getTasksDB
+    getTasksDB,
+    createTaskDB
 }
