@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "../api/auth";
-import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -12,11 +11,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       if (token) {
-        try {
-          const decodedToken = jwtDecode(token);
-          setUser(decodedToken);
-        } catch (error) {
-          console.error("Token invalido:", error);
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (userData) {
+          setUser(userData);
+        } else {
           logout();
         }
       }
@@ -29,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post("/usuarios", data);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.newUser));
       setToken(response.data.token);
       setUser(response.data.newUser);
     } catch (error) {
@@ -41,6 +40,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post("/login", data);
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       setToken(response.data.token);
       setUser(response.data.user);
     } catch (error) {
@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setToken(null);
     setUser(null);
   };

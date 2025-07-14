@@ -1,6 +1,7 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoutes from "./components/PrivateRoutes";
+import { TasksProvider } from "./context/TasksContext";
 
 import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
@@ -33,12 +34,14 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <AuthProvider>
+      <TasksProvider>
       <BrowserRouter>
         <AppRoutes>
           <AppRoutes />
           <NavBar />
         </AppRoutes>
       </BrowserRouter>
+      </TasksProvider>
     </AuthProvider>
   );
 };
