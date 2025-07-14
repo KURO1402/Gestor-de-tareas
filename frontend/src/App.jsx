@@ -1,6 +1,6 @@
 import { BrowserRouter, useRoutes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import PrivateRoutes from "./components/PrivateRoutes";
+import { PrivateRoutes, AdminRoutes } from "./components/PrivateRoutes";
 import { TasksProvider } from "./context/TasksContext";
 
 import Home from "./pages/Home";
@@ -8,17 +8,18 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import Usuarios from "./pages/Usuarios";
 
 import NavBar from "./components/NavBar";
 
 const AppRoutes = () => {
   const routers = useRoutes([
-    /* Rutas publicas */
+    // Rutas publicas
     { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
     { path: "/*", element: <NotFound /> },
-    /* Rutas privadas */
+    // Rutas privadas 
     {
       path: "/dashboard",
       element: (
@@ -27,6 +28,15 @@ const AppRoutes = () => {
         </PrivateRoutes>
       ),
     },
+    //Ruta solo admins
+    {
+      path:"/usuarios",
+      element:(
+        <AdminRoutes>
+          <Usuarios />
+        </AdminRoutes>
+      )
+    }
   ]);
   return routers;
 };
@@ -35,12 +45,12 @@ const App = () => {
   return (
     <AuthProvider>
       <TasksProvider>
-      <BrowserRouter>
-        <AppRoutes>
-          <AppRoutes />
-          <NavBar />
-        </AppRoutes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <AppRoutes>
+            <AppRoutes />
+            <NavBar />
+          </AppRoutes>
+        </BrowserRouter>
       </TasksProvider>
     </AuthProvider>
   );

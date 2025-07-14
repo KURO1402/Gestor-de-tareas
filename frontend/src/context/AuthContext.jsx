@@ -56,9 +56,24 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+    const fetchUsers = async () => {
+    try {
+      const response = await axios.get("/usuarios", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener usuarios:", error);
+      throw error;
+    }
+  };
+
+
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, loading, registro }}
+      value={{ user, token, login, logout, loading, registro, fetchUsers }}
     >
       {children}
     </AuthContext.Provider>

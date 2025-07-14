@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { useTasks } from "../../context/TasksContext";
 import { useAuth } from "../../context/AuthContext";
 import ButtonDashboard from "./ButtonDashboard";
@@ -6,6 +8,7 @@ import TaskItem from "./TaskItem";
 const TasksList = () => {
   const { tasks, loading } = useTasks();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -21,6 +24,7 @@ const TasksList = () => {
         <h2 className="text-xl font-semibold text-white">Mis Tareas</h2>
         {user && user?.rol == "admin" && (
           <ButtonDashboard
+            onClick={() => navigate("/usuarios")}
             title="Gestionar Usuarios"
             icon={
               <svg
@@ -40,6 +44,7 @@ const TasksList = () => {
           />
         )}
         <ButtonDashboard
+        onClick={null}
         title="Nueva Tarea"
         icon={
           <svg

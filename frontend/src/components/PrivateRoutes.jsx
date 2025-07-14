@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
-const PrivateRoutes = ({ children }) => {
+export const PrivateRoutes = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) return <p>Cargando...</p>;
@@ -9,4 +9,13 @@ const PrivateRoutes = ({ children }) => {
   return user ? children : <Navigate to="/login" replace />;
 };
 
-export default PrivateRoutes;
+export const AdminRoutes = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) return <p>Cargando...</p>;
+
+  return user && user.rol === "admin"
+    ? children
+    : <Navigate to="/dashboard" replace />;
+};
+
