@@ -6,7 +6,7 @@ const TasksContext = createContext();
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  // Cargar tareas al iniciar el contexto
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {

@@ -8,8 +8,8 @@ const TaskItem = ({ task}) => {
     >
       <input
         type="checkbox"
-        checked={task.estado === "finalizado" ? true : false}
-        onChange={handleToggleComplete}
+        checked={task?.estado === "finalizado" ? true : false}
+        readOnly // solo hasta cuando se agrege la funcionalidad de marcar como finalizado
         className="h-5 w-5 rounded border-indigo-300 text-cyan-500 focus:ring-cyan-500/50"
       />
       <div className="ml-3 flex-1">
