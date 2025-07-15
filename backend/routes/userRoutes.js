@@ -14,6 +14,6 @@ router.post('/registro', createUser);
 router.get('/usuarios', authMiddleware, verifyAdmin, getUsers);
 
 // Ruta protegida y solo para administardores
-router.get('/ascender', authMiddleware, verifyAdmin, assingAdmin);
+router.post('/ascender', authMiddleware, verifyAdmin, assingAdmin);
 
 module.exports = router;

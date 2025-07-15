@@ -72,16 +72,16 @@ const authenticateUserDB = async (correo, password) => {
 };
 
 //Asignar rol admin 
-const assingAdminDB = async (idUser) => {
+const assingAdminDB = async (idUser,rol) => {
   try {
-    const [result] = await pool.query("UPDATE usuarios SET idTipoUs = 2 WHERE idUsuario = ?",[idUser]);
+    const [result] = await pool.query("UPDATE usuarios SET idTipoUs = ? WHERE idUsuario = ?",[rol, idUser]);
 
     if(result.affectedRows == 0){
-      return {error: "Usuario no ascendido"};
+      return {error: "Cambio de rol no completado"};
 
     }
 
-    return {message: "Usuario ascendido correctamente"};
+    return {message: "Cambio de rol de usuario efectuado con exito"};
 
   } catch (error) {
     console.error("Error en assingAdmin:", error.message);

@@ -115,11 +115,12 @@ const loginUser = async (req, res) => {
 //asignar rol administrador
 const assingAdmin = async(req, res) => {
   try {
-    const {idUser} = req.body;
-    if(!idUser){
-      return res.status(400).json({error: "Falta el usuario"});
+    const {idUser, idRol} = req.body;
+    
+    if(!idUser || isNaN(idUser) || !idRol || isNaN(idRol)){
+      return res.status(400).json({error: "Falta datos necesarios"});
     }
-    const rpta = assingAdminDB(idUser);
+    const rpta = await assingAdminDB(idUser, idRol);
 
     res.json(rpta);
     
