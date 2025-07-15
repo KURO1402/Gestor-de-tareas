@@ -8,7 +8,7 @@ const verifyAdmin = require('../middlewares/verifyAdmin');
 router.post('/login', loginUser);
 
 // Ruta publica
-router.post('/usuarios', createUser);
+router.post('/registro', createUser);
 
 // Ruta protegida y solo para administardores
 router.get('/usuarios', authMiddleware, verifyAdmin, getUsers);
