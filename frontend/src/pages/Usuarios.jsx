@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/dashboard/NavBar";
+import ButtonDashboard from "../components/dashboard/ButtonDashboard";
+import { useNavigate } from "react-router-dom";
 
 const Usuarios = () => {
   const { fetchUsers } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -39,6 +42,7 @@ const Usuarios = () => {
             </svg>
             Gestión de Usuarios
           </h2>
+          <ButtonDashboard title="Volver" onClick={() => navigate("/Dashboard")} />
         </div>
 
         {/* Tabla */}

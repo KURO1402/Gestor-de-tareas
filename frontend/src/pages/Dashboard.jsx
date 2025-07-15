@@ -16,20 +16,14 @@ const Dashboard = () => {
           <CardDashboard  
             title="Tareas Pendientes"
             number={5}
-            description="+2 esta semana"
-            color="red"
           />
           <CardDashboard 
             title="Tareas Completadas"
             number={3}
-            description="75% eficiencia"
-            color="cyan"
           />
           <CardDashboard 
             title="Resumen de Tareas"
-            number={8}
-            description="Total de tareas"
-            color="green"
+            number={"3 de 5"}
           />
         </div>
         

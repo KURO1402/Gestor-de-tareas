@@ -26,14 +26,30 @@ export const TasksProvider = ({ children }) => {
     fetchTasks();
   }, []);
 
+  const postTask = async (data) => {
+    try {
+      const response = await axios.post("/nueva-tarea", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const newTask = {
+        idTarea: response.data.newTask.id, 
+        descripcion: response.data.newTask.descripcion,
+        estado: response.data.newTask.estado,
+      };
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+    } catch (error) {
+      console.error("Error al crear tarea:", error);
+      throw error; 
+    }
+  };
+
   return (
-    <TasksContext.Provider
-      value={{ tasks, loading }}
-    >
+    <TasksContext.Provider value={{ tasks, loading, postTask }}>
       {children}
     </TasksContext.Provider>
   );
 };
 
-// Custom hook para usar el contexto
 export const useTasks = () => useContext(TasksContext);

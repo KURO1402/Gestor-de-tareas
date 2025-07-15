@@ -4,11 +4,14 @@ import { useTasks } from "../../context/TasksContext";
 import { useAuth } from "../../context/AuthContext";
 import ButtonDashboard from "./ButtonDashboard";
 import TaskItem from "./TaskItem";
+import { useState } from "react";
+import TaskForm from "./TaskForm";
 
 const TasksList = () => {
   const { tasks, loading } = useTasks();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   if (loading) {
     return (
@@ -44,27 +47,47 @@ const TasksList = () => {
           />
         )}
         <ButtonDashboard
-        onClick={null}
-        title="Nueva Tarea"
-        icon={
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-        }
+          onClick={() => setShowModal(!showModal)}
+          title={showModal ? "Cerrar Formulario" : "Nueva Tarea"}
+          icon={
+            showModal ? (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            )
+          }
         />
       </div>
+      {showModal && (
+        <div className="p-4">
+          <TaskForm onClose={() => setShowModal(false)} />
+        </div>
+      )}
 
-      {/* lista de tareas */}
       {tasks.length === 0 ? (
         <div className="p-6 text-center text-indigo-400">
           No tienes tareas asignadas. ¡Crea una nueva tarea para comenzar!
@@ -81,6 +104,3 @@ const TasksList = () => {
 };
 
 export default TasksList;
-
-
-
