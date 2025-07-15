@@ -71,8 +71,27 @@ const authenticateUserDB = async (correo, password) => {
   }
 };
 
+//Asignar rol admin 
+const assingAdminDB = async (idUser) => {
+  try {
+    const [result] = await pool.query("UPDATE usuarios SET idTipoUs = 2 WHERE idUsuario = ?",[idUser]);
+
+    if(result.affectedRows == 0){
+      return {error: "Usuario no ascendido"};
+
+    }
+
+    return {message: "Usuario ascendido correctamente"};
+
+  } catch (error) {
+    console.error("Error en assingAdmin:", error.message);
+    throw new Error("Error al asignar rol");
+  }
+}
+
 module.exports = {
   getUsersDB,
   createUserDB,
-  authenticateUserDB
+  authenticateUserDB,
+  assingAdminDB
 };

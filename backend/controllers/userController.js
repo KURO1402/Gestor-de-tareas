@@ -1,7 +1,8 @@
 const {
   getUsersDB,
   createUserDB,
-  authenticateUserDB
+  authenticateUserDB,
+  assingAdminDB
 } = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
@@ -111,8 +112,26 @@ const loginUser = async (req, res) => {
   }
 };
 
+//asignar rol administrador
+const assingAdmin = async(req, res) => {
+  try {
+    const {idUser} = req.body;
+    if(!idUser){
+      return res.status(400).json({error: "Falta el usuario"});
+    }
+    const rpta = assingAdminDB(idUser);
+
+    res.json(rpta);
+    
+  } catch (error) {
+    console.error("Error en assingAdmin:", error);
+    res.status(500).json({ error: "Error de actualizacion de usuario" });
+  }
+}
+
 module.exports = {
   getUsers,
   createUser,
-  loginUser
+  loginUser,
+  assingAdmin
 };
