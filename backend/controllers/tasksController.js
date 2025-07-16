@@ -1,4 +1,4 @@
-const { getTasksDB, createTaskDB } = require('../models/taskModel');
+const { getTasksDB, createTaskDB, updateTaskDB } = require('../models/taskModel');
 
 const getTasks = async(req, res) => {
     try {
@@ -37,7 +37,33 @@ const createTask = async (req, res) => {
     }
 }
 
+const updateTask = async(req, res) => {
+    try{
+        const { id } = req.params;
+        const { estado } = req.body;
+        const userId = req.user.id;
+
+        if(!["pendiente", "completada"].includes(estado)){
+            return res.status(400).json({error: "Estado no valido"});
+        }
+
+        const updateTask = await updateTaskDB(id, estado, userId);
+
+        res.json({
+            message: "Estado de tarea actualizado",
+            task: updateTask
+        });
+    } catch(error){
+        console.error("Error en al actualizar al tarea:", error.message);
+        if(error.message.includes("No encontrada")){
+            return res.status(404).json({error: error.message});
+        }
+        res.status(500).json({error: "Error al actulizar tareas"});
+    }
+};
+
 module.exports = {
     getTasks,
-    createTask
+    createTask,
+    updateTask
 }
