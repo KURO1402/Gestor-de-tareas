@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const registro = async (data) => {
     try {
-      const response = await axios.post("/usuarios", data);
+      const response = await axios.post("/registro", data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.newUser));
       setToken(response.data.token);

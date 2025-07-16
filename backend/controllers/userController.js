@@ -1,7 +1,9 @@
 const {
   getUsersDB,
   createUserDB,
-  authenticateUserDB
+  authenticateUserDB,
+  assingAdminDB,
+  deleteUserDB
 } = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
@@ -111,8 +113,45 @@ const loginUser = async (req, res) => {
   }
 };
 
+//asignar rol administrador
+const assingAdmin = async(req, res) => {
+  try {
+    const {idUser, idRol} = req.body;
+    
+    if(!idUser || isNaN(idUser) || !idRol || isNaN(idRol)){
+      return res.status(400).json({error: "Falta datos necesarios"});
+    }
+    const rpta = await assingAdminDB(idUser, idRol);
+
+    res.json(rpta);
+    
+  } catch (error) {
+    console.error("Error en assingAdmin:", error);
+    res.status(500).json({ error: "Error de actualizacion de usuario" });
+  }
+}
+
+//Eliminar usuario
+const deleteUser = async (req, res) => {
+  try {
+    const {idUser} = req.body;
+    if(!idUser){
+      return res.status(400).json({error: "Faltan datos"});
+    }
+
+    const rpta = await deleteUserDB(idUser);
+    res.json(rpta);
+
+  } catch (error) {
+    console.error("Error en deleteUser:",error.message);
+    res.status(500).json({error: "No se pudo eliminar el usuario"});
+  }
+}
+
 module.exports = {
   getUsers,
   createUser,
-  loginUser
+  loginUser,
+  assingAdmin,
+  deleteUser
 };
