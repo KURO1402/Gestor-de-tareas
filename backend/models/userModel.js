@@ -6,7 +6,16 @@ const getUsersDB = async (page = 1, limit = 20) => {
   const offset = (page - 1) * limit;
   try {
     const [rows] = await pool.query(
-      "SELECT u.idUsuario, u.nombres, u.apellidos, t.tipoUsuario, u.correo FROM usuarios u INNER JOIN tipousuario t ON u.idTipoUs = t.idTipoUs LIMIT ? OFFSET ?",
+      `SELECT 
+        u.idUsuario, 
+        u.nombres, 
+        u.apellidos, 
+        t.tipoUsuario, 
+        u.correo 
+      FROM usuarios u 
+      INNER JOIN tipousuario t 
+        ON u.idTipoUs = t.idTipoUs 
+      LIMIT ? OFFSET ?`,
       [limit, offset]
     );  
     return rows;
@@ -49,11 +58,11 @@ const authenticateUserDB = async (correo, password) => {
       `SELECT u.idUsuario, u.nombres, u.apellidos, u.clave, t.tipoUsuario, u.correo
        FROM usuarios u
        INNER JOIN tipousuario t ON u.idTipoUs = t.idTipoUs
-       WHERE u.correo = ?`,
+       WHERE u.correo = ? `,
       [correo]
     );
     
-    if (rows.length === 0) return null;
+    if (rows.length === 0 || rows[0].estado !== 'activo') return null;
     
     const user = rows[0];
     const coincide= await bcrypt.compare(password, user.clave);//devuelve falso si no coincide
@@ -89,9 +98,25 @@ const assingAdminDB = async (idUser,rol) => {
   }
 }
 
+//Eliminar un usuario
+const deleteUserDB = async (idUser) => {
+  try {
+    const [result] = await pool.query("DELETE FROM usuarios WHERE idUsuario = ?",[idUser]);
+    if(result.affectedRows == 0){
+      return {error: "No se elimino el usuario"};
+    }
+
+    return {message: "Usuario eliminado correctamente"};
+  } catch (error) {
+    console.error("Error en deleteUserDB:",error.message);
+    throw new Error("Error al eliminar usuario")
+  }
+}
+
 module.exports = {
   getUsersDB,
   createUserDB,
   authenticateUserDB,
-  assingAdminDB
+  assingAdminDB,
+  deleteUserDB
 };
