@@ -25,7 +25,7 @@ pnpm-debug.log*
 coverage/
 
 # 🗃️ Base de datos y backups
-*.sql
+# *.sql
 *.sqlite
 *.db
 *.bak

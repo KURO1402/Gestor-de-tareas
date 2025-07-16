@@ -1,0 +1,47 @@
+CREATE DATABASE IF NOT EXISTS gestor_tareas;
+USE gestor_tareas;
+
+CREATE TABLE tipoUsuario (
+    idTipoUs INT AUTO_INCREMENT PRIMARY KEY,
+    tipoUsuario VARCHAR(30) NOT NULL UNIQUE
+);
+
+CREATE TABLE usuarios (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    idTipoUs INT,
+    nombres VARCHAR(30) NOT NULL,
+    apellidos VARCHAR(50) NOT NULL,
+    correo VARCHAR(30) NOT NULL,
+    clave VARCHAR(72) NOT NULL,
+    estado ENUM('activo', 'inactivo') NOT NULL,
+    FOREIGN KEY (idTipoUs) REFERENCES tipoUsuario(idTipoUs)
+);
+
+CREATE TABLE tareas (
+    idTarea INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    descripcion TEXT,
+    estado ENUM('pendiente', 'completada') NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
+);
+
+-- Insertar tipos de usuario solo si no existen
+INSERT IGNORE INTO tipoUsuario (tipoUsuario) VALUES ('administrador');
+INSERT IGNORE INTO tipoUsuario (tipoUsuario) VALUES ('usuario');
+
+-- Procedimiento almacenado para registrar usuario
+DELIMITER //
+
+CREATE PROCEDURE registrarUsuario (
+    IN p_nombres VARCHAR(30),
+    IN p_apellidos VARCHAR(50),
+    IN p_correo VARCHAR(30),
+    IN p_clave VARCHAR(72),
+    IN p_idTipoUs INT
+)
+BEGIN
+    INSERT INTO usuarios (nombres, apellidos, correo, clave, estado, idTipoUs)
+    VALUES (p_nombres, p_apellidos, p_correo, p_clave, 'activo', p_idTipoUs);
+END //
+
+DELIMITER ;
