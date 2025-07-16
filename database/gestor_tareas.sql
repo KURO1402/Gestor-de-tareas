@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-07-2025 a las 07:22:43
+-- Tiempo de generación: 16-07-2025 a las 17:37:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.1.25
 
@@ -18,17 +18,17 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `tareasdb`
+-- Base de datos: `gestor_tareas`
 --
-CREATE DATABASE IF NOT EXISTS `tareasdb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `tareasdb`;
+CREATE DATABASE IF NOT EXISTS `gestor_tareas` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `gestor_tareas`;
 
 DELIMITER $$
 --
 -- Procedimientos
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `registrarUsuario` (IN `p_nombres` VARCHAR(30), IN `p_apellidos` VARCHAR(50), IN `p_correo` VARCHAR(30), IN `p_clave` VARCHAR(72), IN `p_idTipoUs` INT)   BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo, clave, estado, idTipoUs)
+    INSERT INTO usuarios (nombres, apellidos, correo, clave, estado, idTipoUs)
     VALUES (p_nombres, p_apellidos, p_correo, p_clave, 'activo', p_idTipoUs);
 END$$
 
@@ -37,10 +37,10 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tarea`
+-- Estructura de tabla para la tabla `tareas`
 --
 
-CREATE TABLE `tarea` (
+CREATE TABLE `tareas` (
   `idTarea` int(11) NOT NULL,
   `idUsuario` int(11) DEFAULT NULL,
   `descripcion` text DEFAULT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE `tarea` (
 
 CREATE TABLE `tipousuario` (
   `idTipoUs` int(11) NOT NULL,
-  `tipoUsuario` enum('administrador','usuario') NOT NULL
+  `tipoUsuario` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -69,10 +69,10 @@ INSERT INTO `tipousuario` (`idTipoUs`, `tipoUsuario`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuario` (
+CREATE TABLE `usuarios` (
   `idUsuario` int(11) NOT NULL,
   `idTipoUs` int(11) DEFAULT NULL,
   `nombres` varchar(30) NOT NULL,
@@ -83,10 +83,10 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`, `clave`, `estado`) VALUES
+INSERT INTO `usuarios` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`, `clave`, `estado`) VALUES
 (1, 1, 'Juan', 'Perez', 'jperez@gmail.com', '123', 'activo');
 
 --
@@ -94,9 +94,9 @@ INSERT INTO `usuario` (`idUsuario`, `idTipoUs`, `nombres`, `apellidos`, `correo`
 --
 
 --
--- Indices de la tabla `tarea`
+-- Indices de la tabla `tareas`
 --
-ALTER TABLE `tarea`
+ALTER TABLE `tareas`
   ADD PRIMARY KEY (`idTarea`),
   ADD KEY `idUsuario` (`idUsuario`);
 
@@ -108,9 +108,9 @@ ALTER TABLE `tipousuario`
   ADD UNIQUE KEY `tipoUsuario` (`tipoUsuario`);
 
 --
--- Indices de la tabla `usuario`
+-- Indices de la tabla `usuarios`
 --
-ALTER TABLE `usuario`
+ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`idUsuario`),
   ADD KEY `idTipoUs` (`idTipoUs`);
 
@@ -119,9 +119,9 @@ ALTER TABLE `usuario`
 --
 
 --
--- AUTO_INCREMENT de la tabla `tarea`
+-- AUTO_INCREMENT de la tabla `tareas`
 --
-ALTER TABLE `tarea`
+ALTER TABLE `tareas`
   MODIFY `idTarea` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -131,9 +131,9 @@ ALTER TABLE `tipousuario`
   MODIFY `idTipoUs` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
-ALTER TABLE `usuario`
+ALTER TABLE `usuarios`
   MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -141,16 +141,16 @@ ALTER TABLE `usuario`
 --
 
 --
--- Filtros para la tabla `tarea`
+-- Filtros para la tabla `tareas`
 --
-ALTER TABLE `tarea`
-  ADD CONSTRAINT `tarea_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`);
+ALTER TABLE `tareas`
+  ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`);
 
 --
--- Filtros para la tabla `usuario`
+-- Filtros para la tabla `usuarios`
 --
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`idTipoUs`) REFERENCES `tipousuario` (`idTipoUs`);
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idTipoUs`) REFERENCES `tipousuario` (`idTipoUs`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

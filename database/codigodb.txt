@@ -1,12 +1,12 @@
-CREATE DATABASE IF NOT EXISTS tareasdb;
-USE tareasdb;
+CREATE DATABASE IF NOT EXISTS gestor_tareas;
+USE gestor_tareas;
 
 CREATE TABLE tipoUsuario (
     idTipoUs INT AUTO_INCREMENT PRIMARY KEY,
-    tipoUsuario ENUM('administrador', 'usuario') NOT NULL UNIQUE
+    tipoUsuario VARCHAR(30) NOT NULL UNIQUE
 );
 
-CREATE TABLE usuario (
+CREATE TABLE usuarios (
     idUsuario INT AUTO_INCREMENT PRIMARY KEY,
     idTipoUs INT,
     nombres VARCHAR(30) NOT NULL,
@@ -17,12 +17,12 @@ CREATE TABLE usuario (
     FOREIGN KEY (idTipoUs) REFERENCES tipoUsuario(idTipoUs)
 );
 
-CREATE TABLE tarea (
+CREATE TABLE tareas (
     idTarea INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT,
     descripcion TEXT,
     estado ENUM('pendiente', 'completada') NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario)
+    FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
 );
 
 -- Insertar tipos de usuario solo si no existen
@@ -40,7 +40,7 @@ CREATE PROCEDURE registrarUsuario (
     IN p_idTipoUs INT
 )
 BEGIN
-    INSERT INTO usuario (nombres, apellidos, correo, clave, estado, idTipoUs)
+    INSERT INTO usuarios (nombres, apellidos, correo, clave, estado, idTipoUs)
     VALUES (p_nombres, p_apellidos, p_correo, p_clave, 'activo', p_idTipoUs);
 END //
 
