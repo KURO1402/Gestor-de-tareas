@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, useRoutes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { PrivateRoutes, AdminRoutes } from "./components/PrivateRoutes";
+import { TasksProvider } from "./context/TasksContext";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Home from "./pages/Home";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
+import NotFound from "./pages/NotFound";
+import Dashboard from "./pages/Dashboard";
+import Usuarios from "./pages/Usuarios";
 
+import NavBar from "./components/NavBar";
+
+const AppRoutes = () => {
+  const routers = useRoutes([
+    // Rutas publicas
+    { path: "/", element: <Home /> },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/*", element: <NotFound /> },
+    // Rutas privadas 
+    {
+      path: "/dashboard",
+      element: (
+        <PrivateRoutes>
+          <Dashboard />
+        </PrivateRoutes>
+      ),
+    },
+    //Ruta solo admins
+    {
+      path:"/usuarios",
+      element:(
+        <AdminRoutes>
+          <Usuarios />
+        </AdminRoutes>
+      )
+    }
+  ]);
+  return routers;
+};
+
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+    <AuthProvider>
+      <TasksProvider>
+        <BrowserRouter>
+          <AppRoutes>
+            <AppRoutes />
+            <NavBar />
+          </AppRoutes>
+        </BrowserRouter>
+      </TasksProvider>
+    </AuthProvider>
+  );
+};
+export default App;
