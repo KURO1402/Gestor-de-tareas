@@ -30,7 +30,29 @@ const createTaskDB = async(taskData) => {
     }
 }
 
+//Actualizar estado de tarea
+const updateTaskDB = async (idTarea, nuevoEstado, idUsuario)=>{
+    try{
+        const [tarea] = await pool.query(
+            "SELECT idTarea FROM tareas WHERE idTarea = ? AND idUsuario = ?",
+        [idTarea, idUsuario]
+        );
+        if(tarea.length==0){
+            throw new Error("Tarea no encontrada");
+        }
+        await pool.query(
+            "UPDATE tareas SET estado = ? WHERE idTarea = ?",
+            [nuevoEstado, idTarea]
+        );
+        return{id: idTarea, nuevoEstado};
+    } catch(error){
+        console.error("Error al actualizar la tarea:", error.message);
+        throw error;
+    }
+};
+
 module.exports = { 
     getTasksDB,
-    createTaskDB
+    createTaskDB,
+    updateTaskDB
 }
