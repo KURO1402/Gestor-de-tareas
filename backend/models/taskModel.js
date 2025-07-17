@@ -51,8 +51,20 @@ const updateTaskDB = async (idTarea, nuevoEstado, idUsuario)=>{
     }
 };
 
+//Clasificar nuemero de tareas por estado
+const countTasksDB = async ( idUser ) => {
+  try {
+    const [rows] = await pool.query("SELECT estado, COUNT(*) AS totalTareas FROM tareas WHERE idUsuario = ? GROUP BY estado ", [idUser]);
+    return rows;
+  } catch (error) {
+    console.error("Error en countTasksDB:",error.message);
+    throw new Error("Error al clasificar tareas");
+  }
+}
+
 module.exports = { 
     getTasksDB,
     createTaskDB,
-    updateTaskDB
+    updateTaskDB,
+    countTasksDB
 }

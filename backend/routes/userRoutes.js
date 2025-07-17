@@ -6,7 +6,6 @@ const { getUsers,
     assingAdmin, 
     deleteUser
 } = require('../controllers/userController');
-const authMiddleware = require('../middlewares/authMiddleware');
 const verifyAdmin = require('../middlewares/verifyAdmin');
 
 // Ruta publica
@@ -16,12 +15,12 @@ router.post('/login', loginUser);
 router.post('/registro', createUser);
 
 // Ruta para ver usuarios
-router.get('/usuarios', authMiddleware, verifyAdmin, getUsers);
+router.get('/usuarios', verifyAdmin, getUsers);
 
 // Ruta para cambiar rol de administrador a un usuario
-router.post('/ascender', authMiddleware, verifyAdmin, assingAdmin);
+router.post('/ascender', verifyAdmin, assingAdmin);
 
 //Ruta para eliminar usario
-router.post('/eliminar', authMiddleware, verifyAdmin, deleteUser);
+router.post('/eliminar',verifyAdmin, deleteUser);
 
 module.exports = router;

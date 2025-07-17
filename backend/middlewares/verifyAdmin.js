@@ -13,11 +13,14 @@ const verifyAdmin = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Validar que sea administardor
-    if (decoded.rol !== "admin") {
+    if (decoded.rol !== "administrador") {
       return res.status(403).json({ error: "Acceso denegado. Solo administradores." });
     }
 
-    req.user = decoded;
+    req.user = {
+     id: decoded.id, 
+     rol: decoded.rol
+    };
     next();
   } catch (err) {
     return res.status(401).json({ error: "Token inválido o expirado" });

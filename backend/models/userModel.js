@@ -62,7 +62,7 @@ const authenticateUserDB = async (correo, password) => {
       [correo]
     );
     
-    if (rows.length === 0 || rows[0].estado !== 'activo') return null;
+    if (rows.length === 0) return null;
     
     const user = rows[0];
     const coincide= await bcrypt.compare(password, user.clave);//devuelve falso si no coincide

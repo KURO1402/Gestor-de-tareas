@@ -1,4 +1,4 @@
-const { getTasksDB, createTaskDB, updateTaskDB } = require('../models/taskModel');
+const { getTasksDB, createTaskDB, updateTaskDB, countTasksDB } = require('../models/taskModel');
 
 const getTasks = async(req, res) => {
     try {
@@ -62,8 +62,21 @@ const updateTask = async(req, res) => {
     }
 };
 
+//Contar tareas 
+const countTasks = async (req, res) => {
+    try {
+        const { id }  = req.user; 
+        const tasksClasif = await countTasksDB(id);
+        res.json(tasksClasif);
+    } catch (error) {
+        console.error("Error en countTasks:", error.message);
+        res.status(500).json({ error: "Error al clasificar las tareas" });
+    }
+}
+
 module.exports = {
     getTasks,
     createTask,
-    updateTask
+    updateTask,
+    countTasks
 }
