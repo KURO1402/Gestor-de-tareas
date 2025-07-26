@@ -1,13 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "../api/auth";
+import { useAuth } from "./AuthContext";
 
 const TasksContext = createContext();
 
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
+  const user = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user.token) return;
+
     const fetchTasks = async () => {
       try {
         const response = await axios.get("/tareas", {
@@ -24,7 +28,7 @@ export const TasksProvider = ({ children }) => {
     };
 
     fetchTasks();
-  }, []);
+  }, [user.token]);
 
   const postTask = async (data) => {
     try {
