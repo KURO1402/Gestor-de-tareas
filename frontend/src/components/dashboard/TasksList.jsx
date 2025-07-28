@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { useTasks } from "../../context/TasksContext";
+import { useTasks } from "../../context/useTask";
 import { useAuth } from "../../context/AuthContext";
 import ButtonDashboard from "./ButtonDashboard";
 import TaskItem from "./TaskItem";
@@ -25,7 +25,7 @@ const TasksList = () => {
     <div className="backdrop-blur-lg bg-indigo-900/30 border border-indigo-500/20 rounded-xl overflow-hidden mb-8">
       <div className="p-6 border-b border-indigo-500/20 flex justify-between items-center">
         <h2 className="text-xl font-semibold text-white">Mis Tareas</h2>
-        {user && user?.rol == "admin" && (
+        {user && user?.rol == "administrador" && (
           <ButtonDashboard
             onClick={() => navigate("/usuarios")}
             title="Gestionar Usuarios"

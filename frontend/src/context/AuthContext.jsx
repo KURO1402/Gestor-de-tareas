@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-    const fetchUsers = async () => {
+  const fetchUsers = async () => {
     try {
       const response = await axios.get("/usuarios", {
         headers: {
@@ -70,10 +70,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteUser = async (data) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post("http://localhost:3005/api/eliminar", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setUser(response.data);
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, loading, registro, fetchUsers }}
+      value={{ user, token, login, logout, loading, registro, fetchUsers, deleteUser }}
     >
       {children}
     </AuthContext.Provider>

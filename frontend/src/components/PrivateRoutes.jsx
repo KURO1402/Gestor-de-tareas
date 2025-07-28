@@ -14,7 +14,7 @@ export const AdminRoutes = ({ children }) => {
 
   if (loading) return <p>Cargando...</p>;
 
-  return user && user.rol === "admin"
+  return user && user.rol === "administrador"
     ? children
     : <Navigate to="/dashboard" replace />;
 };

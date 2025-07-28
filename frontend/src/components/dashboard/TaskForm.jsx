@@ -1,4 +1,4 @@
-import { useTasks } from "../../context/TasksContext";
+import { useTasks } from "../../context/useTask";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../form/ErrorMessage";
 import { useAuth } from "../../context/AuthContext";
@@ -18,6 +18,7 @@ const TaskForm = ({ onClose }) => {
       await postTask({
         usuario: user?.idUsuario || user?.id,
         descripcion: data.descripcion,
+        estado: "en proceso",
       });
       onClose();
     } catch (error) {

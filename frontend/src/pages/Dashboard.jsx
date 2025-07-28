@@ -1,9 +1,19 @@
 import NavBar from '../components/dashboard/NavBar';
 import CardDashboard from '../components/dashboard/CardDashboard';
 import TasksList from '../components/dashboard/TasksList';
+import { useTasks } from '../context/useTask';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
+  const { totalTask, classifyTask, tasks } = useTasks();
+  useEffect(() => {
+    classifyTask();
+  }, [tasks])
   
+  const pendientes = totalTask.find(t => t.estado === "pendiente")?.totalTareas || 0;
+  const completada = totalTask.find(t => t.estado === "completada")?.totalTareas || 0;
+  const total = pendientes + completada;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900">
 
@@ -15,15 +25,15 @@ const Dashboard = () => {
 
           <CardDashboard  
             title="Tareas Pendientes"
-            number={5}
+            number={pendientes}
           />
           <CardDashboard 
             title="Tareas Completadas"
-            number={3}
+            number={completada}
           />
           <CardDashboard 
             title="Resumen de Tareas"
-            number={"3 de 5"}
+            number={`${completada} de ${total}`}
           />
         </div>
         

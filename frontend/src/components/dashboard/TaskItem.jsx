@@ -1,21 +1,33 @@
+import { useTasks } from "../../context/useTask";
 
 const TaskItem = ({ task}) => {
+  const { updatStatusTask } = useTasks();
+
+  const handleCheckboxChange = async () => {
+    const nuevoEstado = task.estado === "completada" ? "pendiente" : "completada";
+    try {
+      await updatStatusTask(task.idTarea, nuevoEstado);
+    } catch (error) {
+      console.error("Error al actualizar tarea:", error.message);
+    }
+  };
+
   return (
     <div
       className={`p-4 flex items-center transition-colors duration-200 ${
-        task.estado === "finalizado"  ? "bg-indigo-900/10" : "hover:bg-indigo-900/20"
+        task.estado === "completada"  ? "bg-indigo-900/10" : "hover:bg-indigo-900/20"
       }`}
     >
       <input
         type="checkbox"
-        checked={task?.estado === "finalizado" ? true : false}
-        readOnly // solo hasta cuando se agrege la funcionalidad de marcar como finalizado
+        checked={task.estado === "completada"}
+        onChange={handleCheckboxChange}
         className="h-5 w-5 rounded border-indigo-300 text-cyan-500 focus:ring-cyan-500/50"
       />
       <div className="ml-3 flex-1">
         <p
           className={`${
-            task.estado === "finalizado" ? "text-indigo-400 line-through" : "text-white"
+            task.estado === "completada" ? "text-indigo-400 line-through" : "text-white"
           }`}
         >
           {task.descripcion}
