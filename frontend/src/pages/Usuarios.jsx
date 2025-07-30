@@ -4,19 +4,42 @@ import { useNavigate } from "react-router-dom";
 
 import NavBar from "../components/dashboard/NavBar";
 import ButtonDashboard from "../components/dashboard/ButtonDashboard";
+import RoleModal from "../components/dashboard/RoleModal";
 
 const Usuarios = () => {
-  const { fetchUsers, deleteUser } = useAuth();
+  const { fetchUsers, deleteUser, updateUserRole } = useAuth();
+
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showRoleModal, setShowRoleModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const handleRoleChange = async (newRole) => {
+    if (!selectedUser) return;
+    const idRol = newRole === "administrador" ? 1 : 2;
+    try {
+      await updateUserRole({ idUser: selectedUser.idUsuario, idRol });
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.idUsuario === selectedUser.idUsuario
+            ? { ...user, tipoUsuario: newRole }
+            : user
+        )
+      );
+    } catch (error) {
+      console.error("Error al cambiar rol del usuario:", error.message);
+    }
+  };
+
   const handleDelete = (id) => {
-  const confirmar = window.confirm(`¿Estás seguro de que deseas eliminar este usuario?: ${id}`);
-  if (confirmar) {
-    deleteUser({ idUser: id });
-  }
-};
+    const confirmar = window.confirm(
+      `¿Estás seguro de que deseas eliminar este usuario?: ${id}`
+    );
+    if (confirmar) {
+      deleteUser({ idUser: id });
+    }
+  };
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -118,7 +141,7 @@ const Usuarios = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 text-xs rounded-full ${
-                            user.tipoUsuario === "admin"
+                            user.tipoUsuario === "administrador"
                               ? "bg-green-600/20 text-green-400"
                               : "bg-blue-600/20 text-blue-400"
                           }`}
@@ -127,7 +150,13 @@ const Usuarios = () => {
                         </span>
                       </td>
                       <td className="text-center">
-                        <button className="text-indigo-400 hover:text-yellow-400 transition-colors">
+                        <button
+                          onClick={() => {
+                            setShowRoleModal(true);
+                            setSelectedUser(user);
+                          }}
+                          className="text-indigo-400 hover:text-yellow-400 transition-colors"
+                        >
                           <svg
                             className="w-5 h-5"
                             fill="none"
@@ -142,7 +171,10 @@ const Usuarios = () => {
                             />
                           </svg>
                         </button>
-                        <button onClick={() => handleDelete(user.idUsuario)} className="text-indigo-400 hover:text-red-400 transition-colors">
+                        <button
+                          onClick={() => handleDelete(user.idUsuario)}
+                          className="text-indigo-400 hover:text-red-400 transition-colors"
+                        >
                           <svg
                             className="w-5 h-5"
                             fill="none"
@@ -166,6 +198,12 @@ const Usuarios = () => {
           )}
         </div>
       </div>
+      <RoleModal
+        isOpen={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        currentRole={selectedUser?.tipoUsuario}
+        onRoleChange={handleRoleChange}
+      />
     </div>
   );
 };

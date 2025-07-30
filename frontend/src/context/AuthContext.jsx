@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.get("/usuarios", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       return response.data;
@@ -69,6 +69,20 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+
+  const updateUserRole = async (data) => {
+    try {
+      await axios.post("/ascender", 
+        data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        })
+    } catch (error) {
+      console.error("Error al cambiar rol del usuario: ", error.message);
+      throw error; 
+    }
+  }
 
   const deleteUser = async (data) => {
   try {
@@ -91,7 +105,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, loading, registro, fetchUsers, deleteUser }}
+      value={{ user, token, login, logout, loading, registro, fetchUsers, deleteUser, updateUserRole }}
     >
       {children}
     </AuthContext.Provider>
