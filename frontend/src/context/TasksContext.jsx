@@ -9,10 +9,13 @@ export const TasksProvider = ({ children }) => {
   const [totalTask, setTotalTask] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { token } = useAuth();
+  const { token,  } = useAuth();
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      setTasks([]);
+      return;
+    }
 
     const fetchTasks = async () => {
       try {
