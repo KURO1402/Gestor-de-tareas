@@ -15,7 +15,7 @@ router.post('/login', loginUser);
 router.post('/registro', createUser);
 
 // Ruta para ver usuarios
-router.get('/usuarios', verifyAdmin, getUsers);
+router.get('/usuarios/:id', verifyAdmin, getUsers);
 
 // Ruta para cambiar rol de administrador a un usuario
 router.post('/ascender', verifyAdmin, assingAdmin);

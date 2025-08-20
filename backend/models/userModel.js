@@ -2,7 +2,7 @@ const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
 
 // Obtener usuarios (con limite de 20 usuarios)
-const getUsersDB = async (page = 1, limit = 20) => {
+const getUsersDB = async (page = 1, limit = 20, user) => {
   const offset = (page - 1) * limit;
   try {
     const [rows] = await pool.query(
@@ -15,8 +15,9 @@ const getUsersDB = async (page = 1, limit = 20) => {
       FROM usuarios u 
       INNER JOIN tipousuario t 
         ON u.idTipoUs = t.idTipoUs 
+      WHERE idUsuario != ?
       LIMIT ? OFFSET ?`,
-      [limit, offset]
+      [user, limit, offset]
     );  
     return rows;
   } catch (error) {

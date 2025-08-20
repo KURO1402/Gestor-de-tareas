@@ -9,11 +9,12 @@ const jwt = require('jsonwebtoken');
 
 // Obtener lista de usuarios
 const getUsers = async (req, res) => {
+  const user = req.params;
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     
-    const usuarios = await getUsersDB(page, limit);
+    const usuarios = await getUsersDB(page, limit, user);
     
     if (usuarios.length === 0) {
       return res.status(404).json({ message: "No se encontraron usuarios" });
