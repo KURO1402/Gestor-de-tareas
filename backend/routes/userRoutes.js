@@ -21,6 +21,6 @@ router.get('/usuarios', verifyAdmin, getUsers);
 router.post('/ascender', verifyAdmin, assingAdmin);
 
 //Ruta para eliminar usario
-router.post('/eliminar',verifyAdmin, deleteUser);
+router.post('/usuarios/eliminar',verifyAdmin, deleteUser);
 
 module.exports = router;
