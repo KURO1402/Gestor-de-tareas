@@ -22,7 +22,7 @@ CREATE TABLE tareas (
     idUsuario INT,
     descripcion TEXT,
     estado ENUM('pendiente', 'completada') NOT NULL,
-    FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario)
+    FOREIGN KEY (idUsuario) REFERENCES usuarios(idUsuario) ON DELETE CASCADE
 );
 
 -- Insertar tipos de usuario solo si no existen
